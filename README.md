@@ -107,7 +107,7 @@ Skill 的 Stage 0 会自动检查并安装缺失依赖。
 ```bash
 mkdir -p ~/.claude/skills
 cd ~/.claude/skills
-git clone https://github.com/YOUR_USER/pdf-to-crash-course.git
+git clone https://github.com/ShimmerDaylight/pdf-to-crash-course.git
 ```
 
 **方法二：手动复制**
