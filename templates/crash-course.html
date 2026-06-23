@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}}</title>
+<style>
+/* ============ CSS Variables ============ */
+:root{
+  --bg:#f8f8f6; --panel:#ffffff; --ink:#1f2328; --muted:#6b7280;
+  --line:#dde1e6; --brand:#7c3aed; --brand2:#2563eb;
+  --def:#1d6fa5; --thm:#7c3aed; --formula:#0d7d6e; --eg:#c2640a; --warn:#c92a2a; --tip:#0b7b5b; --method:#4f46e5;
+  --sidebar-w:288px;
+  --box-gap:22px;
+}
+
+/* ============ Reset & Base ============ */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:-apple-system,"Segoe UI","Microsoft YaHei",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.8;font-size:16px}
+
+/* ============ Sidebar ============ */
+#sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;overflow-y:auto;
+  background:#1b1f2a;color:#cdd3e0;padding:18px 14px 60px;z-index:50;transition:transform .25s}
+#sidebar h1{font-size:16px;color:#fff;margin:0 0 2px;letter-spacing:.5px}
+#sidebar .sub{font-size:12px;color:#7d8aa5;margin-bottom:14px}
+#sidebar a{display:block;color:#aeb7c9;text-decoration:none;padding:5px 10px;border-radius:6px;font-size:13.5px}
+#sidebar a:hover{background:#262c3a;color:#fff}
+#sidebar a.chap{font-weight:600;color:#e8ebf2;margin-top:10px;font-size:14px}
+#sidebar a.sec{padding-left:24px;font-size:12.5px;color:#94a0b8}
+#sidebar a.active{background:var(--brand);color:#fff}
+.progress-wrap{margin:6px 0 14px}
+.progress-bar{height:6px;background:#2a3142;border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#7c3aed,#2563eb);transition:width .2s}
+.progress-txt{font-size:11px;color:#7d8aa5;margin-top:4px}
+
+/* ============ Main ============ */
+#main{margin-left:var(--sidebar-w);padding:0}
+.container{max-width:880px;margin:0 auto;padding:42px 36px 120px}
+
+/* ============ Hero ============ */
+.hero{background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;padding:52px 36px;border-radius:0}
+.hero .inner{max-width:880px;margin:0 auto}
+.hero h1{margin:0 0 8px;font-size:30px;font-weight:800}
+.hero p{margin:4px 0;opacity:.95}
+.hero .meta{margin-top:18px;display:flex;gap:18px;flex-wrap:wrap;font-size:14px}
+.hero .meta span{background:rgba(255,255,255,.16);padding:5px 14px;border-radius:20px}
+
+/* ============ Headings ============ */
+h2.chapter{font-size:25px;font-weight:800;margin:50px 0 12px;padding-bottom:10px;
+  border-bottom:3px solid var(--brand);scroll-margin-top:18px}
+h3.section{font-size:20px;font-weight:700;margin:34px 0 10px;color:#111827;scroll-margin-top:18px;
+  border-left:5px solid var(--brand2);padding-left:12px}
+h4{font-size:17px;font-weight:700;margin:22px 0 6px;color:#374151}
+
+/* ============ Box System (improved: left-border only, no full borders, no shadow) ============ */
+.box{margin:var(--box-gap) 0;padding:10px 0 10px 16px;
+  border:none;border-left:4px solid var(--line);background:transparent;
+  box-shadow:none;border-radius:0}
+.box .label{display:inline-block;font-weight:700;font-size:12.5px;padding:1px 10px;border-radius:4px;
+  color:#fff;margin-bottom:8px;letter-spacing:.5px}
+
+/* Box type colors — left border only, subtle label */
+.box.def{border-left-color:var(--def)}  .box.def .label{background:var(--def)}
+.box.thm{border-left-color:var(--thm)}  .box.thm .label{background:var(--thm)}
+.box.formula{border-left-color:var(--formula)} .box.formula .label{background:var(--formula)}
+.box.eg{border-left-color:var(--eg)} .box.eg .label{background:var(--eg)}
+.box.warn{border-left-color:var(--warn)} .box.warn .label{background:var(--warn)}
+.box.tip{border-left-color:var(--tip)} .box.tip .label{background:var(--tip)}
+.box.method{border-left-color:var(--method)} .box.method .label{background:var(--method)}
+
+/* Example solution area */
+.eg .sol{margin-top:10px;padding-top:10px;border-top:1px dashed #d4a574}
+.eg .sol::before{content:"解  ";font-weight:700;color:var(--eg)}
+
+/* ============ Tables (triple-line style) ============ */
+table.tbl{border-collapse:collapse;width:100%;margin:18px 0;font-size:14.5px}
+table.tbl thead{border-top:2px solid #333;border-bottom:1.5px solid #333}
+table.tbl thead th{padding:10px 12px;text-align:center;font-weight:700;background:none}
+table.tbl tbody{border-bottom:2px solid #333}
+table.tbl td{padding:9px 12px;text-align:center;border:none}
+table.tbl tr:nth-child(even) td{background:#fafafa}
+table.tbl td.l{text-align:left}
+
+/* ============ Misc ============ */
+.kbd{background:#eef2ff;color:#4338ca;padding:1px 7px;border-radius:4px;font-size:13px;font-weight:600}
+.pill{display:inline-block;background:#ede9fe;color:#6d28d9;font-size:12px;padding:2px 9px;border-radius:12px;margin:2px 4px}
+.miss{background:#fef2f2;border-left:4px solid #c92a2a;color:#991b1b;padding:10px 16px;border-radius:0;font-size:14px;margin:16px 0}
+.divider{height:1px;background:var(--line);margin:44px 0}
+.note{font-size:13.5px;color:var(--muted)}
+.tag-must{background:#c92a2a;color:#fff;font-size:11px;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle}
+.tag-hot{background:#e05b0e;color:#fff;font-size:11px;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle}
+ul.clean{margin:8px 0;padding-left:22px}
+ul.clean li{margin:5px 0}
+
+details.qa{border-left:4px solid var(--line);padding:0;margin:12px 0;background:transparent}
+details.qa summary{cursor:pointer;padding:12px 16px;font-weight:600;list-style:none;color:#374151}
+details.qa summary::-webkit-details-marker{display:none}
+details.qa summary::before{content:"▸ ";color:var(--brand)}
+details.qa[open] summary::before{content:"▾ "}
+details.qa .ans{padding:0 16px 14px;color:#374151}
+
+.backtop{position:fixed;right:22px;bottom:22px;background:var(--brand);color:#fff;border:none;border-radius:50%;
+  width:46px;height:46px;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:60;display:none}
+#menuBtn{position:fixed;top:14px;left:14px;z-index:70;background:var(--brand);color:#fff;border:none;
+  border-radius:8px;width:42px;height:42px;font-size:20px;cursor:pointer;display:none}
+
+/* Inline formula emphasis */
+.formula em{font-style:normal;color:var(--formula);font-weight:600}
+
+/* Embedded images */
+.img-wrap{margin:20px 0;text-align:center}
+.img-wrap img{max-width:100%;height:auto;border-radius:4px}
+.img-wrap .caption{font-size:13px;color:var(--muted);margin-top:6px}
+
+/* ============ Responsive ============ */
+@media(max-width:1000px){
+  #sidebar{transform:translateX(-100%)}
+  #sidebar.open{transform:translateX(0)}
+  #main{margin-left:0}
+  #menuBtn{display:block}
+  .hero{padding:64px 20px 36px}
+  .container{padding:28px 18px 100px}
+}
+
+/* ============ Print (for PDF generation) ============ */
+@media print{
+  @page{size:A4;margin:20mm 18mm}
+  :root{--bg:#fff}
+  #sidebar,#menuBtn,.backtop,.progress-wrap{display:none!important}
+  #main{margin-left:0}
+  .hero{background:#fff!important;color:#1f2328!important;padding:0 0 20px!important;
+    border-bottom:3px solid var(--brand)}
+  .hero h1{color:#1f2328}
+  .hero .meta span{background:#f0f0f0!important;color:#374151!important}
+  .container{padding:0;max-width:none}
+  h2.chapter{page-break-before:always;margin-top:20px}
+  h2.chapter:first-of-type{page-break-before:avoid}
+  .box{page-break-inside:avoid}
+  body{font-size:14px;line-height:1.7}
+}
+</style>
+</head>
+<body>
+
+<button id="menuBtn">☰</button>
+
+<!-- ============ Sidebar ============ -->
+<nav id="sidebar">
+  <h1>{{SIDEBAR_TITLE}}</h1>
+  <div class="sub">{{SIDEBAR_SUBTITLE}}</div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="pfill"></div></div>
+    <div class="progress-txt" id="ptxt">阅读进度 0%</div>
+  </div>
+  {{SIDEBAR}}
+</nav>
+
+<!-- ============ Main Content ============ -->
+<div id="main">
+  <header class="hero" id="top">
+    <div class="inner">
+      <h1>{{HERO_TITLE}}</h1>
+      <p>{{HERO_SUBTITLE}}</p>
+      <div class="meta">{{HERO_META}}</div>
+    </div>
+  </header>
+
+  <div class="container">
+    {{CONTENT}}
+  </div>
+</div>
+
+<button class="backtop" id="backtop">↑</button>
+
+<script>
+// Sidebar toggle (mobile)
+const menuBtn=document.getElementById('menuBtn'),sidebar=document.getElementById('sidebar');
+menuBtn&&menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('#sidebar a').forEach(a=>a.addEventListener('click',()=>{
+  if(window.innerWidth<=1000) sidebar.classList.remove('open');
+}));
+
+// Back to top + progress
+const backtop=document.getElementById('backtop'),pfill=document.getElementById('pfill'),ptxt=document.getElementById('ptxt');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement,b=document.body;
+  const st=h.scrollTop||b.scrollTop, sh=(h.scrollHeight||b.scrollHeight)-h.clientHeight;
+  const pct=sh>0?Math.round(st/sh*100):0;
+  pfill.style.width=pct+'%';ptxt.textContent='阅读进度 '+pct+'%';
+  backtop.style.display=st>400?'block':'none';
+});
+backtop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+// Active section highlight via IntersectionObserver
+const links=[...document.querySelectorAll('#sidebar a')];
+const map=new Map();
+links.forEach(a=>{
+  const id=a.getAttribute('href').slice(1);
+  const el=document.getElementById(id);
+  if(el) map.set(el,a);
+});
+const obs=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const a=map.get(e.target);
+      a&&a.classList.add('active');
+    }
+  });
+},{rootMargin:'-10% 0px -80% 0px'});
+map.forEach((a,el)=>obs.observe(el));
+</script>
+</body>
+</html>
